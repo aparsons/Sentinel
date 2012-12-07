@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- https://sentinel.whitehatsec.com/static/schema/schedule.xsd -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://whitehatsec.com/XML-api-Schedule" xmlns:wh="http://whitehatsec.com/XML-api-Schedule" xmlns:whjob="http://whitehatsec.com/XML-api-Job" elementFormDefault="qualified" >
+    <xs:import namespace="http://whitehatsec.com/XML-api-Job" schemaLocation="job.xsd"/>
+    <xs:element name="schedules" type="wh:schedule_list"/>
+    <xs:element name="schedule" type="wh:whschedule"/>
+	
+    <xs:complexType name="schedule_list" >
+        <xs:sequence>
+            <xs:element name="schedule" type="wh:whschedule" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="href" type="xs:anyURI"/>
+        <xs:attribute name="query" type="xs:string"/>
+        <xs:attribute name="api-version" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="whschedule" >
+
+        <xs:sequence>
+            <xs:element  maxOccurs="1" minOccurs="1" name="start_date" type="xs:dateTime" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="creator" type="whjob:user" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="job" type="whjob:whjob" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="end_date" type="xs:dateTime" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="timezone" type="xs:string" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="name" type="xs:string" />
+            <xs:element  maxOccurs="unbounded" minOccurs="1" name="spec" type="wh:whschedulespec" />
+        </xs:sequence>
+
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="href" type="xs:anyURI"/>
+        <xs:attribute name="api-version" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="whschedulespec">
+        <xs:all>
+            <xs:element maxOccurs="1" minOccurs="0" name="cron_spec" type="xs:string" />
+            <xs:element maxOccurs="1" minOccurs="0" name="duration" type="xs:integer" />
+            <xs:element maxOccurs="1" minOccurs="0" name="timezone" type="xs:string" />
+            <xs:element maxOccurs="1" minOccurs="0" name="time" type="xs:time" />
+            <xs:element maxOccurs="1" minOccurs="0" name="weekday" type="wh:enumweekday" />
+        </xs:all>
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="type" type="wh:enumspectype"/>
+        <xs:attribute name="href" type="xs:anyURI"/>
+    </xs:complexType>
+
+    <xs:simpleType name="enumweekday">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Sunday"/>
+            <xs:enumeration value="Monday"/>
+            <xs:enumeration value="Tuesday"/>
+            <xs:enumeration value="Wednesday"/>
+            <xs:enumeration value="Thursday"/>
+            <xs:enumeration value="Friday"/>
+            <xs:enumeration value="Saturday"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="enumspectype">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="continuous"/>
+            <xs:enumeration value="cron"/>
+            <xs:enumeration value="daily"/>
+            <xs:enumeration value="weekly"/>
+            <xs:enumeration value="single"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="site">
+        <xs:all>
+            <xs:element maxOccurs="1" minOccurs="0" name="label" type="xs:string" />
+        </xs:all>
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="href" type="xs:anyURI"/>
+    </xs:complexType>
+
+
+    <xs:complexType name="ref_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" name="url" >
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:anyURI">
+                            <xs:attribute name="href" type="xs:anyURI"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="url">
+        <xs:simpleContent>
+            <xs:extension base="xs:anyURI">
+                <xs:attribute name="href" type="xs:anyURI"/>
+                <xs:attribute name="id" type="xs:integer" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>

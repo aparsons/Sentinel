@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- https://sentinel.whitehatsec.com/static/schema/vuln.xsd -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://whitehatsec.com/XML-api-Vuln" xmlns:wh="http://whitehatsec.com/XML-api-Vuln" elementFormDefault="qualified" >
+    <xs:element name="stats" type="wh:wh_vuln_stats"/>
+    <xs:element name="vulnerabilities" type="wh:wh_vuln_list"/>
+    <xs:element name="retest" type="wh:wh_vuln_list"/>
+    <xs:element name="attack_vectors" type="wh:wh_attack_vector_list"/>
+    <xs:element name="attack_vector" type="wh:wh_attack_vector"/>
+    <xs:element name="notes" type="wh:wh_attack_vector_note_list"/>
+    <xs:element name="note" type="wh:wh_attack_vector_note"/>
+	
+    <xs:complexType name="wh_vuln_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="vulnerability" type="wh:wh_vuln" />
+            <xs:element minOccurs="0" maxOccurs="1" name="query" type="wh:wh_vuln_query_list" />
+            <xs:element minOccurs="0" maxOccurs="1" name="display" type="wh:wh_vuln_display_list" />
+            <xs:element minOccurs="0" maxOccurs="1" name="stats" type="wh:wh_vuln_stats" />
+        </xs:sequence>
+        <xs:attribute name="original_query" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_vuln_stats" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="site" type="wh:wh_vuln_site" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="wh_vuln_site" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="severity" type="wh:wh_vuln_severity" />
+            <xs:element minOccurs="0" maxOccurs="1" name="open" type="wh:wh_vuln_count" />
+            <xs:element minOccurs="0" maxOccurs="1" name="closed" type="wh:wh_vuln_count" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="label" type="xs:string"/>
+        <xs:attribute name="weight" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_vuln_count" >
+        <xs:attribute name="count" type="xs:integer" />
+    </xs:complexType>
+
+    <xs:complexType name="wh_vuln_severity" >
+        <xs:attribute name="low" type="xs:integer"/>
+        <xs:attribute name="medium" type="xs:integer"/>
+        <xs:attribute name="high" type="xs:integer"/>
+        <xs:attribute name="critical" type="xs:integer"/>
+        <xs:attribute name="urgent" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_vuln_query_list" >
+        <xs:attribute name="site" type="xs:string"/>
+        <xs:attribute name="status" type="xs:string"/>
+        <xs:attribute name="class" type="xs:string"/>
+        <xs:attribute name="severity" type="xs:integer"/>
+        <xs:attribute name="threat" type="xs:integer"/>
+        <xs:attribute name="score" type="xs:integer"/>
+        <xs:attribute name="found" type="xs:string"/>
+        <xs:attribute name="opened" type="xs:string" use="optional"/>
+        <xs:attribute name="closed" type="xs:string" use="optional"/>
+        <xs:attribute name="start_date" type="xs:string" use="optional"/>
+        <xs:attribute name="end_date" type="xs:string" use="optional"/>
+        <xs:attribute name="url" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_vuln_display_list" >
+        <xs:attribute name="attack_vectors" type="xs:integer"/>
+        <xs:attribute name="description" type="xs:integer"/>
+        <xs:attribute name="solution" type="xs:integer"/>
+        <xs:attribute name="qanda" type="xs:integer"/>
+        <xs:attribute name="request" type="xs:integer"/>
+        <xs:attribute name="response" type="xs:integer"/>
+        <xs:attribute name="body" type="xs:integer"/>
+        <xs:attribute name="headers" type="xs:integer"/>
+        <xs:attribute name="abbr" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_vuln" >
+        <xs:all>
+            <xs:element minOccurs="0" maxOccurs="1" name="attack_vectors" type="wh:wh_attack_vector_list" />
+            <xs:element minOccurs="0" maxOccurs="1" name="description" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="solution" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="qanda" type="wh:wh_qanda" />
+        </xs:all>
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="class" type="xs:string"/>
+        <xs:attribute name="status" type="xs:string"/>
+        <xs:attribute name="retest_state" type="xs:string"/>
+        <xs:attribute name="severity" type="xs:integer"/>
+        <xs:attribute name="threat" type="xs:integer"/>
+        <xs:attribute name="score" type="xs:integer"/>
+        <xs:attribute name="cvss_score" type="xs:float"/>
+        <xs:attribute name="cvss_vector" type="xs:string"/>
+        <xs:attribute name="found" type="xs:string"/>
+        <xs:attribute name="opened" type="xs:string" use="optional"/>
+        <xs:attribute name="closed" type="xs:string" use="optional"/>
+        <xs:attribute name="url" type="xs:string"/>
+        <xs:attribute name="href" type="xs:anyURI"/>
+        <xs:attribute name="site" type="xs:integer"/>
+        <xs:attribute name="has_notes" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_attack_vector_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="attack_vector" type="wh:wh_attack_vector" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="wh_attack_vector" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="request" type="wh:wh_request" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="response" type="wh:wh_response" />
+            <xs:element minOccurs="0" maxOccurs="1" name="notes" type="wh:wh_attack_vector_note_list" />
+            <xs:element minOccurs="0" maxOccurs="1" name="flagged" type="xs:boolean" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="state" type="xs:string"/>		<!-- the state of the attack_vector -->
+        <xs:attribute name="retest_state" type="xs:string"/>	<!-- the state of retest for this attack_vector -->
+        <xs:attribute name="href" type="xs:anyURI"/>
+        <xs:attribute name="tested" type="xs:string"/>
+        <xs:attribute name="opened" type="xs:string"/>
+        <xs:attribute name="found" type="xs:string"/>
+        <xs:attribute name="has_notes" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_attack_vector_note_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="note" type="wh:wh_attack_vector_note" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="wh_attack_vector_note" >
+        <xs:all>
+            <xs:element name="author" type="xs:string"/>
+            <xs:element name="created" type="xs:string"/>
+            <xs:element name="content" type="xs:string"/>
+        </xs:all>
+        <xs:attribute name="id" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_request" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="param" type="wh:wh_param" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="headers" type="wh:wh_headers" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="body" type="wh:wh_body" />
+        </xs:sequence>
+        <xs:attribute name="method" type="xs:string"/>
+        <xs:attribute name="url" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_response" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="headers" type="wh:wh_headers" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="body" type="wh:wh_body" />
+        </xs:sequence>
+        <xs:attribute name="status" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_body" mixed="true" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="body" type="xs:base64Binary" />
+        </xs:sequence>
+        <xs:attribute name="brief" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_param" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="value" type="xs:string" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_headers" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="header" type="wh:wh_header" />
+        </xs:sequence>
+        <xs:attribute name="status" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_header" >
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_qanda" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="question" type="wh:wh_question" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="wh_question" mixed="true" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="answer" type="wh:wh_answer" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string"/>
+        <xs:attribute name="author" type="xs:string"/>
+        <xs:attribute name="time" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_answer" mixed="true" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="answer" type="xs:string" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:string"/>
+        <xs:attribute name="author" type="xs:string"/>
+        <xs:attribute name="time" type="xs:string"/>
+    </xs:complexType>
+
+</xs:schema>

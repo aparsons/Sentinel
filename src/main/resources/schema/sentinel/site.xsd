@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- https://sentinel.whitehatsec.com/static/schema/site.xsd -->
+<!--
+{
+       	client_id => 	q{^\d+$},
+              		  site_url => 	q{^https?:\/\/[a-z.-]+\/\S+$},
+              		  label => 	q{^[[:print:]]*$},
+              		  weight 	   =>	q{^10|\d$},
+              		  active_admin => 	q{^0|1$},
+              		  active_consult => 	q{^0|1$},
+              		  active_user => 	q{^0|1$},
+              		  banner => 	q{^[[:print:]]*$},
+              		  speed => 	q{^\d*(\.\d+)?$},
+              		  scan_perpetual => 	q{0|1},
+              		  sslciphers => 	q{^[[:print:]]*$},
+              		  notes => 	q{^[[:print:]]*$},
+              		  satellite => 	q{0|1},
+                  satellite_id => q{^\d*$},
+                  industry => 	q{^[[:print:]]+$},
+              		  discovery => 	q{0|1},
+}
+-->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://whitehatsec.com/XML-api-Site" xmlns:whsched="http://whitehatsec.com/XML-api-Schedule"  xmlns:whsite="http://whitehatsec.com/XML-api-Site" elementFormDefault="qualified" >
+    <xs:import namespace="http://whitehatsec.com/XML-api-Schedule" schemaLocation="schedule.xsd" />
+    <xs:element name="sites" type="whsite:site_list"/>
+    <xs:element name="site" type="whsite:whsite"/>
+    <xs:element name="entry_points" type="whsite:entry_list"/>
+    <xs:element name="allowed_hosts" type="whsite:allowed_list"/>
+    <xs:element name="allowed_addresses" type="whsite:allowed_addr_list"/>
+    <xs:element name="discovered_hosts" type="whsite:discovered_list"/>
+    <xs:element name="offsite_hosts" type="whsite:offsite_list"/>
+    <xs:element name="site_credentials" type="whsite:cred_list"/>
+	
+    <xs:complexType name="site_list" >
+        <xs:sequence>
+            <xs:element name="site" type="whsite:whsite" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="whsite" >
+
+        <xs:all>
+            <xs:element  maxOccurs="1" minOccurs="0" name="site" type="xs:string" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="create_date" type="xs:integer" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="activation_date" type="xs:string" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="notes_updated_date" type="xs:string" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="banner" type="xs:string" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="site_url" type="xs:string" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="label" type="xs:string" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="weight" type="xs:integer" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="active_admin" type="xs:boolean" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="active_user" type="xs:boolean" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="active_consult" type="xs:boolean" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="speed" type="xs:float" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="sslciphers" type="xs:string" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="notes" type="xs:string" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="industry" type="xs:string" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="service_level" type="whsite:service_level" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="service_type" type="whsite:service_type" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="client_id" type="xs:integer" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="satellite" type="xs:boolean" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="satellite_id" type="xs:integer" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="discovery" type="xs:boolean" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="allowed_hosts" type="whsite:allowed_list" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="discovered_hosts" type="whsite:discovered_list" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="global_rank" type="xs:string" /> <!-- NULL FIX HACK (xs:integer to xs:string) -->
+            <xs:element  maxOccurs="1" minOccurs="0" name="market_rank" type="xs:string" /> <!-- NULL FIX HACK (xs:integer to xs:string) -->
+            <xs:element  maxOccurs="1" minOccurs="0" name="entry_points" type="whsite:entry_list" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="site_credentials" type="whsite:cred_list" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="scan_schedule" type="whsite:site_scan_schedule" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="enable_scan_creds" type="xs:boolean" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="scan_cred_updated_by" type="xs:string" />
+            <xs:element  maxOccurs="1" minOccurs="0" name="scan_cred_updated_date" type="xs:string" />
+        </xs:all>
+
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="href" type="xs:anyURI"/>
+    </xs:complexType>
+
+    <xs:complexType name="site_scan_schedule">
+        <xs:all>
+            <xs:element maxOccurs="1" minOccurs="0" name="schedule" type="whsched:whschedule"/>
+        </xs:all>
+    </xs:complexType>
+
+    <xs:complexType name="ref_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="url" >
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:anyURI">
+                            <xs:attribute name="href" type="xs:anyURI"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="service_type" >
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Enterprise"/>
+            <xs:enumeration value="Flex"/>
+            <xs:enumeration value=""/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="service_level" >
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PL"/>
+            <xs:enumeration value="BE"/>
+            <xs:enumeration value="SE"/>
+            <xs:enumeration value="PE"/>
+            <xs:enumeration value="DE"/>
+            <xs:enumeration value="None"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="entry_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="entry_point" type="whsite:entry_point" />
+        </xs:sequence>
+        <xs:attribute name="href" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="offsite_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="host" type="whsite:host" />
+        </xs:sequence>
+        <xs:attribute name="href" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="discovered_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="host" type="whsite:host" />
+        </xs:sequence>
+        <xs:attribute name="href" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="cidr">
+        <xs:annotation>
+            <xs:documentation>Allowed Address Range in CIDR notation</xs:documentation>
+        </xs:annotation>
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:integer"/>
+                <xs:attribute name="href" type="xs:anyURI"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="allowed_addr_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="cidr" type="whsite:cidr" />
+        </xs:sequence>
+        <xs:attribute name="href" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="allowed_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="host" type="whsite:host" />
+        </xs:sequence>
+        <xs:attribute name="href" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="cred_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="credential" type="whsite:site_cred" />
+        </xs:sequence>
+        <xs:attribute name="href" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="host_link" >
+        <xs:all>
+        </xs:all>
+        <xs:attribute name="href" type="xs:string" />
+        <xs:attribute name="host_id" type="xs:integer" />
+        <xs:attribute name="hostname" type="xs:anyURI" />
+        <xs:attribute name="scheme" type="xs:string" />
+        <xs:attribute name="count" type="xs:integer" />
+        <xs:attribute name="allowance" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="host" >
+        <xs:all>
+            <xs:element minOccurs="0" maxOccurs="1" name="links" type="whsite:host_link_list" />
+            <xs:element minOccurs="0" maxOccurs="1" name="forms" type="whsite:form_list" />
+            <xs:element minOccurs="0" maxOccurs="1" name="logins" type="whsite:form_list" />
+            <xs:element minOccurs="0" maxOccurs="1" name="operating_system" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="web_server" type="xs:string" />
+        </xs:all>
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="href" type="xs:string" />
+        <xs:attribute name="hostname" type="xs:anyURI" />
+        <xs:attribute name="scheme" type="xs:string" />
+        <xs:attribute name="address" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="form" >
+        <xs:all>
+        </xs:all>
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="href" type="xs:string" />
+        <xs:attribute name="location" type="xs:anyURI" />
+        <xs:attribute name="action" type="xs:anyURI" />
+        <xs:attribute name="login" type="xs:boolean" />
+    </xs:complexType>
+    <xs:complexType name="form_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="form" type="whsite:form" />
+        </xs:sequence>
+        <xs:attribute name="count" type="xs:integer" />
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="href" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="host_link_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="host_link" type="whsite:host_link" />
+        </xs:sequence>
+        <xs:attribute name="count" type="xs:integer" />
+        <xs:attribute name="discovered_count" type="xs:integer" />
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="href" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="host_list" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="host" type="whsite:host" />
+        </xs:sequence>
+        <xs:attribute name="count" type="xs:integer" />
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="href" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="site_cred" >
+        <xs:all>
+            <xs:element minOccurs="0" maxOccurs="1" name="username" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="cred_group_name" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="updated_date" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="scanning_cred" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="password" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="login_url" type="xs:anyURI" />
+            <xs:element minOccurs="0" maxOccurs="1" name="login_valid_url" type="xs:anyURI" />
+            <xs:element minOccurs="0" maxOccurs="1" name="notes" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="certificate" type="whsite:cert" />
+        </xs:all>
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="href" type="xs:anyURI" />
+        <xs:attribute name="active" type="xs:boolean" />
+        <xs:attribute name="status" type="whsite:site_cred_status" />
+        <xs:attribute name="creator" type="xs:string" />
+    </xs:complexType>
+    <xs:simpleType name="site_cred_status">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="bad"/>
+            <xs:enumeration value="good"/>
+            <xs:enumeration value="new"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="cert">
+        <xs:simpleContent>
+            <xs:extension base="xs:base64Binary">
+                <xs:attribute name="format" type="whsite:cert_fmt"/>
+                <xs:attribute name="password" type="xs:string"/>
+                <xs:attribute name="name" type="xs:string"/>
+                <xs:attribute name="test_url" type="xs:anyURI"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:simpleType name="cert_fmt">
+        <xs:annotation>
+            <xs:documentation>Allowed certificate formats</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="pkcs12"/>
+            <xs:enumeration value="pem"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="entry_point">
+        <xs:all>
+            <xs:element minOccurs="0" name="uri" type="xs:anyURI" />
+            <xs:element minOccurs="0" name="method" type="xs:string" />
+            <xs:element minOccurs="0" name="content" type="xs:base64Binary" />
+        </xs:all>
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="href" type="xs:anyURI" />
+    </xs:complexType>
+
+</xs:schema>

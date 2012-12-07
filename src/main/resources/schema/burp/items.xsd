@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="" targetNamespace="" elementFormDefault="qualified">
+    <xs:element name="items">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="item"/>
+            </xs:sequence>
+            <xs:attribute name="burpVersion" use="required" type="xs:NMTOKEN"/>
+            <xs:attribute name="exportTime" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="item">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="time"/>
+                <xs:element ref="url"/>
+                <xs:element ref="host"/>
+                <xs:element ref="port"/>
+                <xs:element ref="protocol"/>
+                <xs:element ref="method"/>
+                <xs:element ref="path"/>
+                <xs:element ref="extension"/>
+                <xs:element ref="request"/>
+                <xs:element ref="status"/>
+                <xs:element ref="responselength"/>
+                <xs:element ref="mimetype"/>
+                <xs:element ref="response"/>
+                <xs:element ref="comment"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="time" type="xs:string"/>
+    <xs:element name="url" type="xs:anyURI"/>
+    <xs:element name="host">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:NMTOKEN">
+                    <xs:attribute name="ip" use="required" type="xs:NMTOKEN"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="port" type="xs:integer"/>
+    <xs:element name="protocol" type="xs:NCName"/>
+    <xs:element name="method" type="xs:NCName"/>
+    <xs:element name="path" type="xs:string"/>
+    <xs:element name="extension" type="xs:NCName"/>
+    <xs:element name="request">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:base64Binary">
+                    <xs:attribute name="base64" use="required" type="xs:boolean"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="status" type="xs:integer"/>
+    <xs:element name="responselength" type="xs:integer"/>
+    <xs:element name="mimetype" type="xs:NCName"/>
+    <xs:element name="response">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:base64Binary">
+                    <xs:attribute name="base64" use="required" type="xs:boolean"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="comment">
+        <xs:complexType/>
+    </xs:element>
+</xs:schema>

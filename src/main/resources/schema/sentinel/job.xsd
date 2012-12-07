@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- https://sentinel.whitehatsec.com/static/schema/job.xsd -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://whitehatsec.com/XML-api-Job" xmlns:wh="http://whitehatsec.com/XML-api-Job" xmlns:whsched="http://whitehatsec.com/XML-api-Schedule" elementFormDefault="qualified" >
+    <xs:element name="jobs" type="wh:job_list" />
+    <xs:element name="job" type="wh:whjob" />
+    <xs:element name="instance" type="wh:jobInstance" />
+    <xs:element name="instances" type="wh:jobInstanceList" />
+
+    <xs:complexType name="job_list" >
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="job" type="wh:whjob" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="href" type="xs:anyURI"/>
+        <xs:attribute name="query" type="xs:string"/>
+        <xs:attribute name="api-version" type="xs:integer"/>
+    </xs:complexType>
+    <xs:complexType name="whjob" >
+        <xs:all>
+            <xs:element minOccurs="0" maxOccurs="1" name="name" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="creator" type="wh:user" />
+            <xs:element minOccurs="1" maxOccurs="1" name="jobtype" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="target" type="wh:targetType" />
+            <xs:element minOccurs="0" maxOccurs="1" name="services" type="wh:serviceparams" />
+            <xs:element minOccurs="0" maxOccurs="1" name="instances" type="wh:jobInstanceList" />
+        </xs:all>
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="href" type="xs:anyURI"/>
+        <xs:attribute name="api-version" type="xs:integer"/>
+    </xs:complexType>
+    <xs:complexType name="user">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:integer"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="targetType">
+        <xs:all>
+            <xs:element minOccurs="0" maxOccurs="1" name="site" type="wh:wh_job_site" />
+            <xs:element minOccurs="0" maxOccurs="1" name="user" type="wh:wh_job_user" />
+            <xs:element minOccurs="0" maxOccurs="1" name="disco" type="wh:wh_job_disco" />
+        </xs:all>
+        <xs:attribute name="type" type="wh:targetTypeEnum"/>
+        <xs:attribute name="id" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="wh_job_site" >
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:integer"/>
+                <xs:attribute name="href" type="xs:anyURI"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="wh_job_user" >
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:integer"/>
+                <xs:attribute name="href" type="xs:anyURI"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="wh_job_disco" >
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="id" type="xs:integer"/>
+                <xs:attribute name="href" type="xs:anyURI"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:simpleType name="targetTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="site"/>
+            <xs:enumeration value="user"/>
+            <xs:enumeration value="disco"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="jobInstanceStatusEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="aborted"/>
+            <xs:enumeration value="running"/>
+            <xs:enumeration value="pending"/>
+            <xs:enumeration value="dependent"/>
+            <xs:enumeration value="suspended"/>
+            <xs:enumeration value="completed"/>
+            <xs:enumeration value="blackout"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="jobInstanceList" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="instance" type="wh:jobInstance" />
+        </xs:sequence>
+        <xs:attribute name="query" type="xs:string"/>
+        <xs:attribute name="api-version" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="jobInstance" >
+        <xs:all>
+            <xs:element minOccurs="0" maxOccurs="1" name="timestamp" type="xs:dateTime" />
+            <xs:element minOccurs="0" maxOccurs="1" name="begin" type="xs:dateTime" />
+            <xs:element minOccurs="0" maxOccurs="1" name="end" type="xs:dateTime" />
+            <xs:element minOccurs="1" maxOccurs="1" name="status" type="wh:jobInstanceStatusEnum" />
+            <xs:element minOccurs="0" maxOccurs="1" name="progress" type="xs:integer"/>
+            <xs:element minOccurs="0" maxOccurs="1" name="name" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="schedule" type="xs:integer" />
+            <xs:element minOccurs="0" maxOccurs="1" name="job" type="xs:integer" />
+
+        </xs:all>
+        <xs:attribute  name="status" type="wh:jobInstanceStatusEnum" />
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="job_id" type="xs:integer"/>
+        <xs:attribute name="schedule_id" type="xs:integer"/>
+        <xs:attribute name="href" type="xs:anyURI"/>
+        <xs:attribute name="api-version" type="xs:integer"/>
+    </xs:complexType>
+
+    <xs:complexType name="serviceparams" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="1" name="service" type="wh:servicespec" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="href" type="xs:anyURI" />
+    </xs:complexType>
+    <xs:complexType name="servicespec" >
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="parameter" type="wh:parametertype" />
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:integer" />
+        <xs:attribute name="href" type="xs:anyURI" />
+        <xs:attribute name="name" type="xs:string" />
+    </xs:complexType>
+
+    <xs:complexType name="parametertype">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="type" type="xs:string"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>

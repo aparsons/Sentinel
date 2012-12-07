@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- https://sentinel.whitehatsec.com/static/schema/user.xsd -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://whitehatsec.com/XML-api-User" xmlns:wh="http://whitehatsec.com/XML-api-User" xmlns:whuser="http://whitehatsec.com/XML-api-User" elementFormDefault="qualified" >
+    <xs:element name="users" type="wh:user_list" />
+    <xs:element name="user" type="wh:user" />
+	
+    <xs:complexType name="user_list" >
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" name="user" type="wh:user" />
+        </xs:sequence>
+        <xs:attribute name="href" type="xs:anyURI"/>
+    </xs:complexType>
+
+    <xs:complexType name="user" >
+        <xs:all>
+            <xs:element minOccurs="0" maxOccurs="1" name="fax" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="job_title" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="last_login" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="middle_initial" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="notes" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="address" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="city" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="company" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="country" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="created_by" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="creation_time" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="email_address" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="first_name" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="last_name" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="phone" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="state" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="timezone" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="username" type="xs:string" />
+            <xs:element minOccurs="1" maxOccurs="1" name="zipcode" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="1" name="daily_email" type="xs:boolean" />
+            <xs:element minOccurs="0" maxOccurs="1" name="monthly_email" type="xs:boolean" />
+            <xs:element minOccurs="0" maxOccurs="1" name="weekly_email" type="xs:boolean" />
+        </xs:all>
+        <xs:attribute name="id" type="xs:integer"/>
+        <xs:attribute name="username" type="xs:string"/>
+        <xs:attribute name="type" type="xs:string"/>
+        <xs:attribute name="href" type="xs:anyURI"/>
+    </xs:complexType>
+
+</xs:schema>
