@@ -3,8 +3,6 @@ package net.aparsons.sentinel;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.aparsons.sentinel.core.Constants;
 import net.aparsons.sentinel.core.Sentinel;
 import org.apache.commons.cli.CommandLine;
@@ -14,8 +12,12 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Launcher {
+    
+    private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
     
     private static Sentinel sentinel;
     
@@ -24,9 +26,6 @@ public class Launcher {
         
         final Option keyOption = new Option(Constants.OPTION_SENTINEL_KEY, true, "WhiteHat Sentinel API key");
         keyOption.setRequired(false);
-        
-        final Option logOption = new Option(Constants.OPTION_SENTINEL_LOG, true, "Log file location");
-        logOption.setRequired(false);
         
         final Option syncOption = new Option(Constants.OPTION_SENTINEL_SYNC, false, "Download latest WhiteHat Sentinel data");
         syncOption.setRequired(false);
@@ -50,10 +49,6 @@ public class Launcher {
 
             sentinel = new Sentinel();
             
-            if (cmdLine.hasOption(Constants.OPTION_SENTINEL_LOG)) {
-                sentinel.setLog(cmdLine.getOptionValue(Constants.OPTION_SENTINEL_LOG));
-            }
-            
             if (cmdLine.hasOption(Constants.OPTION_SENTINEL_KEY)) {
                 sentinel.setKey(cmdLine.getOptionValue(Constants.OPTION_SENTINEL_KEY));
             }
@@ -67,7 +62,7 @@ public class Launcher {
                 try {
                     key = reader.readLine();
                 } catch (IOException ioe) {
-                    Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, ioe.getMessage(), ioe);
+                    logger.error(ioe.getMessage(), ioe);
                     System.exit(1);
                 }
 
@@ -79,10 +74,10 @@ public class Launcher {
             }
             
         } catch (NullPointerException npe) {
-            Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, npe.getMessage(), npe);
+            logger.error(npe.getMessage(), npe);
             printUsage();
         } catch (ParseException pe) {
-            Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, pe.getMessage(), pe);
+            logger.error(pe.getMessage(), pe);
             printUsage();
         }
     }

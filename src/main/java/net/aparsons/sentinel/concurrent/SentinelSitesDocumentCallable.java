@@ -2,14 +2,15 @@ package net.aparsons.sentinel.concurrent;
 
 import com.whitehatsec.xmlApiSite.SitesDocument;
 import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.aparsons.sentinel.api.SentinelAPI;
 import net.aparsons.sentinel.http.HttpManager;
 import org.apache.xmlbeans.XmlException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SentinelSitesDocumentCallable implements Callable<SitesDocument> {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final SentinelAPI api;
     
     public SentinelSitesDocumentCallable(SentinelAPI api) {
@@ -24,11 +25,11 @@ public class SentinelSitesDocumentCallable implements Callable<SitesDocument> {
             try {
                 return SitesDocument.Factory.parse(response);
             } catch (XmlException xe) {
-                Logger.getLogger(SentinelSitesDocumentCallable.class.getName()).log(Level.SEVERE, xe.getMessage(), xe);
+                logger.error(xe.getMessage(), xe);                
             }
         }
         
-        Logger.getLogger(SentinelSitesDocumentCallable.class.getName()).log(Level.WARNING, "Retrieval of site list failed");
+        logger.warn("Retrieval of site list failed");
         return null;
     }
     

@@ -1,0 +1,23 @@
+<configuration debug="false">
+    
+    <contextName>Sentinel</contextName>
+    
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>sentinel.log</file>
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    
+    <root level="debug">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </root>
+    
+</configuration>

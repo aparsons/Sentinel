@@ -2,18 +2,20 @@ package net.aparsons.sentinel.io;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FileManager {
 
+    private static final Logger logger = LoggerFactory.getLogger(FileManager.class);
+    
     public static void writeXML(File file, XmlObject xmlObj) {
         // Creates parent directories
         File dir = new File(file.getParent());
         if (!dir.exists()) {
-            Logger.getLogger(FileManager.class.getName()).log(Level.INFO, "Creating directory {0}", dir.getPath());
+            logger.info("Creating directory: " + dir.getPath());
             dir.mkdirs();
         }
 
@@ -25,9 +27,9 @@ public class FileManager {
         // Save xml file
         try {
             xmlObj.save(file, options);
-            Logger.getLogger(FileManager.class.getName()).log(Level.INFO, "Saved file {0} ", file.getPath());
+            logger.info("Saved file: " + file.getPath());
         } catch (IOException ioe) {
-            Logger.getLogger(FileManager.class.getName()).log(Level.WARNING, "Unable to save file" + file.getPath(), ioe);
+            logger.warn("Unable to save file: " + file.getPath(), ioe);
         }
     }
     

@@ -2,8 +2,6 @@ package net.aparsons.sentinel.http;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -18,6 +16,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpProtocolParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpManager {
     
@@ -25,6 +25,7 @@ public class HttpManager {
     
     private static HttpManager instance;
     
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final HttpClient client;
     private final ResponseHandler<String> rh;
     
@@ -59,20 +60,20 @@ public class HttpManager {
                 
         for (int attempt = 1; attempt <= REQUEST_ATTEMPTS && response == null; attempt++) {
             try {
-                Logger.getLogger(HttpManager.class.getName()).log(Level.INFO, "Executing request {0}/{1}: {2}", new String[]{ Integer.toString(attempt), Integer.toString(REQUEST_ATTEMPTS), hur.getRequestLine().toString() });
+                logger.info("Executing request " + attempt + "/" + REQUEST_ATTEMPTS + ": " + hur.getRequestLine().toString());
                 response = client.execute(hur, rh);
             } catch (SocketTimeoutException ste) {
                 if (attempt < REQUEST_ATTEMPTS) {
-                    Logger.getLogger(HttpManager.class.getName()).log(Level.INFO, "Retrying request in {0} seconds", attempt);
+                    logger.info("Retrying request in " + attempt + " seconds");
                     try {
                         Thread.sleep(1000 * attempt);
                     } catch (InterruptedException ie) {
                     }
                 }
             } catch (ClientProtocolException cpe) {
-                Logger.getLogger(HttpManager.class.getName()).log(Level.SEVERE, cpe.getMessage(), cpe);
+                logger.error(cpe.getMessage(), cpe);
             } catch (IOException ioe) {
-                Logger.getLogger(HttpManager.class.getName()).log(Level.SEVERE, ioe.getMessage(), ioe);
+                logger.error(ioe.getMessage(), ioe);
             }
         }
         

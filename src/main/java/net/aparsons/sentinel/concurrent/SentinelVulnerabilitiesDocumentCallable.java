@@ -2,14 +2,15 @@ package net.aparsons.sentinel.concurrent;
 
 import com.whitehatsec.xmlApiVuln.VulnerabilitiesDocument;
 import java.util.concurrent.Callable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.aparsons.sentinel.api.SentinelAPI;
 import net.aparsons.sentinel.http.HttpManager;
 import org.apache.xmlbeans.XmlException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SentinelVulnerabilitiesDocumentCallable implements Callable<VulnerabilitiesDocument> {
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final SentinelAPI api;
     private final int siteId;
     
@@ -26,11 +27,11 @@ public class SentinelVulnerabilitiesDocumentCallable implements Callable<Vulnera
             try {
                 return VulnerabilitiesDocument.Factory.parse(response);
             } catch (XmlException xe) {
-                Logger.getLogger(SentinelVulnerabilitiesDocumentCallable.class.getName()).log(Level.SEVERE, xe.getMessage(), xe);
+                logger.error(xe.getMessage(), xe);
             }
         }
         
-        Logger.getLogger(SentinelVulnerabilitiesDocumentCallable.class.getName()).log(Level.WARNING, "Retrieval of vulnerabilities for site {0} failed", siteId);
+        logger.warn("Retrieval of vulnerabilities for site " + siteId + " failed");
         return null;
     }
     

@@ -8,9 +8,13 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class NaiveSSLSocketFactory {
-        
+    
+    private static final Logger logger = LoggerFactory.getLogger(NaiveSSLSocketFactory.class);
+    
     public static SSLSocketFactory getSocketFactory() {
         TrustManager[] tm = new TrustManager[] { new NaiveX509TrustManager() };
         
@@ -19,9 +23,9 @@ public final class NaiveSSLSocketFactory {
             context = SSLContext.getInstance("SSL");
             context.init(null, tm, null);
         } catch (NoSuchAlgorithmException nsae) {
-            // TODO Log
+            logger.error(nsae.getMessage(), nsae);
         } catch (KeyManagementException kme) {        
-            // TODO Log
+            logger.error(kme.getMessage(), kme);
         }
         
         return new SSLSocketFactory(context, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);

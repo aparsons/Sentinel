@@ -5,15 +5,16 @@ import com.whitehatsec.xmlApiSite.Whsite;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import net.aparsons.sentinel.api.SentinelAPI;
 import net.aparsons.sentinel.concurrent.SentinelSitesDocumentCallable;
 import net.aparsons.sentinel.concurrent.SyncSentinelRunnable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Sentinel {
     
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final Preferences prefs;
     
     public Sentinel() {
@@ -24,19 +25,11 @@ public class Sentinel {
         return prefs.get(Constants.PREF_SENTINEL_KEY, null);
     }
     
-    public String getLog() {
-        return prefs.get(Constants.PREF_SENTINEL_LOG, Constants.DEFAULT_SENTINEL_LOG);
-    }
-    
     public void setKey(String key) {
         prefs.put(Constants.PREF_SENTINEL_KEY, key);
     }
     
-    public void setLog(String location) {
-        prefs.put(Constants.PREF_SENTINEL_LOG, location);
-    }
-    
-    public void sync() {        
+    public void sync() {       
         ExecutorService executor = Executors.newCachedThreadPool();
         
         SentinelAPI api = new SentinelAPI(getKey());
@@ -46,9 +39,9 @@ public class Sentinel {
         try {
             sitesDoc = executor.submit(new SentinelSitesDocumentCallable(api)).get();
         } catch (InterruptedException ie) {
-            Logger.getLogger(Sentinel.class.getName()).log(Level.WARNING, ie.getMessage(), ie);
+            logger.warn(ie.getMessage(), ie);
         } catch (ExecutionException ee) {
-            Logger.getLogger(Sentinel.class.getName()).log(Level.WARNING, ee.getMessage(), ee);
+            logger.warn(ee.getMessage(), ee);
         }
         
         // Retrieve data for each siteDocFuture
