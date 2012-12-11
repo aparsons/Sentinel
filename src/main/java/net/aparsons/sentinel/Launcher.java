@@ -41,7 +41,7 @@ public class Launcher {
     }
     
     public static void main(String[] args) {
-        logger.warn("Starting WhiteHat Sentinel");
+        logger.info("Starting WhiteHat Sentinel");
         
         CommandLineParser parser = new GnuParser();
         
