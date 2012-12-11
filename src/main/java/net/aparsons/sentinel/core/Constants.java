@@ -2,7 +2,7 @@ package net.aparsons.sentinel.core;
 
 public interface Constants {
     
-    public static final String VERSION = "2.0.1";
+    public static final String VERSION = "2.0.2";
     
     // Preferences Keys
     public static final String PREF_SENTINEL_KEY = "sentinel.key";

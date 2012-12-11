@@ -41,6 +41,7 @@ public class Launcher {
     }
     
     public static void main(String[] args) {
+        logger.warn("Starting WhiteHat Sentinel");
         
         CommandLineParser parser = new GnuParser();
         
@@ -54,7 +55,8 @@ public class Launcher {
             }
             
             if (sentinel.getKey() == null) {
-                System.out.print("Enter your WhiteHat Sentinel API Key: ");
+                logger.warn("WhiteHat Sentinel API key is not set");
+                System.out.print("Enter your WhiteHat Sentinel API key: ");
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 String key = null;
@@ -68,8 +70,9 @@ public class Launcher {
 
                 sentinel.setKey(key);
             }
-            
+
             if (cmdLine.hasOption(Constants.OPTION_SENTINEL_SYNC)) {
+                logger.info("Starting sync task");
                 sentinel.sync();
             }
             
