@@ -27,10 +27,14 @@ public class Launcher {
         final Option keyOption = new Option(Constants.OPTION_SENTINEL_KEY, true, "WhiteHat Sentinel API key");
         keyOption.setRequired(false);
         
+        final Option helpOption = new Option(Constants.OPTION_HELP, false, "Prints this help message describing all command-line options");
+        helpOption.setRequired(false);
+        
         final Option syncOption = new Option(Constants.OPTION_SENTINEL_SYNC, false, "Download latest WhiteHat Sentinel data");
         syncOption.setRequired(false);
         
         options.addOption(keyOption);
+        options.addOption(helpOption);
         options.addOption(syncOption);
         
         return options;
@@ -41,15 +45,20 @@ public class Launcher {
     }
     
     public static void main(String[] args) {
-        logger.info("Starting WhiteHat Sentinel");
+        logger.info("Init");
         
         CommandLineParser parser = new GnuParser();
         
         try {
             CommandLine cmdLine = parser.parse(getOptions(), args);
 
-            sentinel = new Sentinel();
+            if (cmdLine.hasOption(Constants.OPTION_HELP)) {
+                printUsage();
+                System.exit(0);
+            }
             
+            sentinel = new Sentinel();
+
             if (cmdLine.hasOption(Constants.OPTION_SENTINEL_KEY)) {
                 sentinel.setKey(cmdLine.getOptionValue(Constants.OPTION_SENTINEL_KEY));
             }

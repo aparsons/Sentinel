@@ -9,6 +9,7 @@ public interface Constants {
     
     // Command Line Options
     public static final String OPTION_SENTINEL_KEY = "key";
+    public static final String OPTION_HELP = "help";
     public static final String OPTION_SENTINEL_SYNC = "sync";
     
 }
